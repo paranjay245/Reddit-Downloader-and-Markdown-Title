@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Link Processor Enhanced</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Bulk Link Processor</h1>
+        <p class="subtitle">Separate URLs & text, generate Markdown links.</p>
+    </header>
+
+    <main class="container">
+        <section class="input-section card">
+            <h2>Input Text</h2>
+            <p>Paste your text containing URLs and other content below:</p>
+            <textarea id="bulkInput" rows="15" placeholder="Example:
+Check this out:
+https://www.google.com
+And this cool article.
+https://www.example.com/article"></textarea>
+            <button id="processButton">Extract Layers</button>
+        </section>
+
+        <section class="output-section">
+            <!-- Layer 1: Markdown Links -->
+            <div class="output-layer card">
+                <h2>Layer 1: Markdown Links</h2>
+                <p>URLs formatted as `[Title Placeholder](URL)`.</p>
+                 <p class="note limitations"><strong>Note:</strong> Title fetching is extremely limited in the browser due to security restrictions (CORS). Titles are placeholders.</p>
+                <textarea id="markdownOutput" class="output-area" rows="8" readonly placeholder="Formatted links will appear here..."></textarea>
+                <div class="controls">
+                    <button id="copyMarkdownButton" class="copy-button" disabled>Copy</button>
+                    <button id="downloadMarkdownButton" class="download-button" disabled>Download .md</button>
+                </div>
+            </div>
+
+            <!-- Layer 2: URLs -->
+            <div class="output-layer card">
+                <h2>Layer 2: Extracted URLs</h2>
+                <p>All valid URLs found in the input.</p>
+                <div class="toggle-container">
+                    <label for="urlMarkdownToggle">Format as Markdown:</label>
+                    <input type="checkbox" id="urlMarkdownToggle" class="toggle-switch">
+                </div>
+                <textarea id="urlOutput" class="output-area" rows="8" readonly placeholder="Detected URLs will appear here..."></textarea>
+                 <div class="controls">
+                    <button id="copyUrlsButton" class="copy-button" disabled>Copy</button>
+                    <button id="downloadUrlsButton" class="download-button" disabled>Download .txt</button>
+                </div>
+            </div>
+
+            <!-- Layer 3: Non-URL Text -->
+            <div class="output-layer card">
+                <h2>Layer 3: Non-URL Text</h2>
+                <p>All text content that wasn't identified as a URL.</p>
+                <textarea id="nonUrlOutput" class="output-area" rows="8" readonly placeholder="Non-URL text will appear here..."></textarea>
+                 <div class="controls">
+                    <button id="copyNonUrlsButton" class="copy-button" disabled>Copy</button>
+                    <button id="downloadNonUrlsButton" class="download-button" disabled>Download .txt</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created with HTML, CSS, and JavaScript.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

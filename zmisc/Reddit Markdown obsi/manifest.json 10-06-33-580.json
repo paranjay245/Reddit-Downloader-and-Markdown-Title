@@ -1,0 +1,9 @@
+{
+    "id": "reddit-markdown-link",
+    "name": "Reddit Markdown Link",
+    "version": "1.0.0",
+    "minAppVersion": "0.15.0",
+    "description": "Convert Reddit links into markdown links with titles",
+    "author": "Your Name",
+    "isDesktopOnly": false
+} 

@@ -1,0 +1,9 @@
+{
+    "id": "url-magic",
+    "name": "URL Magic",
+    "version": "202403.1.0",
+    "minAppVersion": "0.15.0",
+    "description": "Transform URLs into beautiful markdown links with titles",
+    "author": "Your Name",
+    "isDesktopOnly": false
+} 

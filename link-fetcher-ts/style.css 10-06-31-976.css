@@ -1,0 +1,207 @@
+/* Basic Reset & Font */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.6;
+    background-color: #f0f2f5; /* Light grey background */
+    color: #333;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+    color: #1a237e; /* Dark blue */
+    margin-bottom: 5px;
+}
+
+header .subtitle {
+    color: #555;
+    font-size: 1.1em;
+}
+
+/* Layout Container */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 30px; /* Space between input and output sections */
+    max-width: 1400px; /* Limit overall width */
+    margin: 0 auto; /* Center container */
+}
+
+/* Card Style */
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+.card:hover {
+     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Sections */
+.input-section {
+    flex: 1; /* Take up available space */
+    min-width: 350px; /* Minimum width before wrapping */
+    display: flex;
+    flex-direction: column;
+}
+
+.output-section {
+    flex: 2; /* Take up more space */
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between output layers */
+}
+
+.output-layer h2 {
+    margin-bottom: 8px;
+    color: #3f51b5; /* Indigo color */
+    border-bottom: 2px solid #e8eaf6; /* Light indigo border */
+    padding-bottom: 5px;
+    text-align: left; /* Align layer titles left */
+}
+.output-layer p {
+     margin-bottom: 10px;
+     font-size: 0.95em;
+     color: #444;
+}
+
+/* Textareas */
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da; /* Light grey border */
+    border-radius: 6px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    background-color: #f8f9fa; /* Very light background */
+    resize: vertical; /* Allow vertical resize */
+    min-height: 100px;
+}
+
+textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+textarea.output-area {
+    background-color: #e9ecef; /* Slightly darker for readonly */
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-right: 8px;
+}
+
+button:active:not(:disabled) {
+     transform: scale(0.98);
+}
+
+#processButton {
+    background-color: #28a745; /* Green */
+    color: white;
+    width: 100%; /* Make main button full width */
+    margin-top: auto; /* Push to bottom in flex column */
+}
+#processButton:hover:not(:disabled) {
+    background-color: #218838;
+}
+#processButton:disabled {
+     background-color: #6c757d; /* Grey when disabled */
+     cursor: wait;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+}
+
+.copy-button, .download-button {
+    background-color: #007bff; /* Blue */
+    color: white;
+    flex-grow: 1; /* Allow buttons to share space */
+}
+.copy-button:hover:not(:disabled), .download-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #adb5bd; /* Lighter grey for disabled controls */
+    cursor: not-allowed;
+}
+
+/* Toggle Switch */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; /* Smaller toggle */
+    height: 20px;
+    cursor: pointer;
+}
+.toggle-switch input { display: none; } /* Hide default checkbox */
+/* Add styles for custom toggle appearance if desired, or leave as default checkbox */
+
+
+/* Notes and Limitations */
+.note {
+    font-size: 0.85em;
+    color: #6c757d; /* Medium grey */
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+.note.limitations {
+    border-left: 3px solid #ffc107; /* Warning yellow border */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .input-section, .output-section {
+        min-width: 100%; /* Stack sections */
+    }
+}

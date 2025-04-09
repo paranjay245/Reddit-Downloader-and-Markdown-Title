@@ -1,0 +1,14 @@
+rules:
+  - author: paranjay
+    conditions:
+      - base=main
+      - label=automerge
+      - check-success=build
+      - check-success=lint
+      - check-success=test
+    actions:
+      queue:
+        method: rebase
+      merge:
+        method: squash
+        commitMessageTemplate: '{{title}} (#{{number}})' 
