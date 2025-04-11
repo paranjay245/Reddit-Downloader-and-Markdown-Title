@@ -305,8 +305,8 @@ function fetchTitlesHybrid() {
                         const displayName = (pageData === null || pageData === void 0 ? void 0 : pageData.name) || (pageData === null || pageData === void 0 ? void 0 : pageData.screen_name) || null;
                         const followerCount = (pageData === null || pageData === void 0 ? void 0 : pageData.followers_count) || '0';
                         const formattedTitle = displayName
-                            ? `- [(${followerCount}) ${displayName} (@${username}) / X](${url})`
-                            : `- [(@${username}) / X](${url})`;
+                            ? `${displayName} (@${username}) / X`
+                            : `(@${username}) / X`;
                         console.log('Created X/Twitter title:', formattedTitle);
                         fetchedTitle = formattedTitle;
                     }
@@ -405,12 +405,11 @@ function fetchTitlesHybrid() {
                                     .substring(followerMatch[0].length, displayTitle.indexOf('@'))
                                     .trim();
                             }
-                            // Construct the title in the exact format: [(4) Sam Altman (@sama) / X]
                             if (displayName && username) {
-                                markdownLine = `- [(${followerCount}) ${displayName} (@${username}) / X](${urlToUse})`;
+                                markdownLine = `- [${displayName} (@${username}) / X](${urlToUse})`;
                             }
                             else if (username) {
-                                markdownLine = `- [(${followerCount}) (@${username}) / X](${urlToUse})`;
+                                markdownLine = `- [(@${username}) / X](${urlToUse})`;
                             }
                             else {
                                 markdownLine = `- ${urlToUse}`;
