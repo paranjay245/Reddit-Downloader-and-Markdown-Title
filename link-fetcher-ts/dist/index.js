@@ -305,8 +305,8 @@ function fetchTitlesHybrid() {
                         const displayName = (pageData === null || pageData === void 0 ? void 0 : pageData.name) || (pageData === null || pageData === void 0 ? void 0 : pageData.screen_name) || null;
                         const followerCount = (pageData === null || pageData === void 0 ? void 0 : pageData.followers_count) || '0';
                         const formattedTitle = displayName
-                            ? `- [(${followerCount}) ${displayName} (@${username}) / X](${url})`
-                            : `- [(@${username}) / X](${url})`;
+                            ? `${displayName} (@${username}) / X`
+                            : `(@${username}) / X`;
                         console.log('Created X/Twitter title:', formattedTitle);
                         fetchedTitle = formattedTitle;
                     }
@@ -390,36 +390,30 @@ function fetchTitlesHybrid() {
                     }
                     // X.com/Twitter Specific Formatting
                     else if (hostname === 'x.com' || hostname === 'twitter.com') {
-                        // If the title looks good (not just "X" or "Twitter"), use it as is
-                        if (displayTitle && !displayTitle.match(/^(X|Twitter)$/i)) {
-                            // Extract follower count if present
-                            const followerMatch = displayTitle.match(/^\((\d+(?:,\d+)*)\)/);
-                            const followerCount = followerMatch ? followerMatch[1] : '0';
-                            // Extract username
-                            const usernameMatch = displayTitle.match(/@([^)]+)/);
-                            const username = usernameMatch ? usernameMatch[1] : '';
-                            // Extract display name if present (between follower count and username)
+                        const urlUsernameMatch = urlToUse.match(/(?:x\.com|twitter\.com)\/([^\/\?]+)/i);
+                        const urlUsername = urlUsernameMatch ? urlUsernameMatch[1] : '';
+                        
+                        if (urlUsername && urlUsername !== 'home' && urlUsername !== 'explore' && 
+                            urlUsername !== 'notifications' && urlUsername !== 'messages') {
                             let displayName = '';
-                            if (followerMatch && usernameMatch) {
-                                displayName = displayTitle
-                                    .substring(followerMatch[0].length, displayTitle.indexOf('@'))
-                                    .trim();
+                            
+                            if (displayTitle && !displayTitle.match(/^(X|Twitter)$/i)) {
+                                const cleanedTitle = displayTitle.replace(/^\(\d+(?:,\d+)*\)\s*/, '');
+                                
+                                const nameMatch = cleanedTitle.match(/^([^@]+)@/);
+                                if (nameMatch) {
+                                    displayName = nameMatch[1].trim();
+                                }
                             }
-                            // Construct the title in the exact format: [(4) Sam Altman (@sama) / X]
-                            if (displayName && username) {
-                                markdownLine = `- [(${followerCount}) ${displayName} (@${username}) / X](${urlToUse})`;
+                            
+                            if (!displayName) {
+                                displayName = urlUsername;
                             }
-                            else if (username) {
-                                markdownLine = `- [(${followerCount}) (@${username}) / X](${urlToUse})`;
-                            }
-                            else {
-                                markdownLine = `- ${urlToUse}`;
-                                console.log(`   LOG: X/Twitter title is generic -> Outputting plain URL`);
-                            }
-                        }
-                        else {
+                            
+                            markdownLine = `- [${displayName} (@${urlUsername}) / X](${urlToUse})`;
+                        } else {
                             markdownLine = `- ${urlToUse}`;
-                            console.log(`   LOG: X/Twitter title is generic -> Outputting plain URL`);
+                            console.log(`   LOG: X/Twitter URL doesn't contain a valid username -> Outputting plain URL`);
                         }
                     }
                     // Other Formatting/Cleaning

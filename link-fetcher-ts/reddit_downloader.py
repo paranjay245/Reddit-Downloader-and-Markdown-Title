@@ -7,6 +7,7 @@ from prawcore.exceptions import ResponseException, Redirect
 import os
 import re
 import time
+import zipfile
 from datetime import datetime
 
 # --- Configuration ---
@@ -66,10 +67,12 @@ def format_comment(comment, level=0):
 # ==============================================================================
 # == Main Post Downloading Function (Body Logic Updated) =======================
 # ==============================================================================
-def download_reddit_post(reddit, url, download_comments=True):
+def download_reddit_post(reddit, url, download_comments=True, output_dir=None):
     """Downloads a single Reddit post and optionally its comments."""
     print(f"Processing URL: {url}")
     filepath = ""
+    current_output_dir = output_dir if output_dir else OUTPUT_DIR
+    
     try:
         submission = reddit.submission(url=url)
 
@@ -147,12 +150,11 @@ def download_reddit_post(reddit, url, download_comments=True):
         else:
             markdown_content += "---\n\n*Comments were not downloaded.*\n"
 
-        # --- Save to File (Unchanged) ---
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
+        os.makedirs(current_output_dir, exist_ok=True)
         safe_subreddit = subreddit_prefixed.replace('/', '_')
         safe_title = sanitize_filename(title)
         filename = f"{safe_subreddit}_{post_id}_{safe_title}.md"
-        filepath = os.path.join(OUTPUT_DIR, filename)
+        filepath = os.path.join(current_output_dir, filename)
 
         print(f"  Attempting to save to: {filepath}")
         with open(filepath, 'w', encoding='utf-8') as f:
@@ -183,6 +185,38 @@ def download_reddit_post(reddit, url, download_comments=True):
         print(f"  An unexpected error occurred for URL {url}: {type(e).__name__} - {e}")
 
     return False # Return False if any exception caused failure
+
+def create_download_zip(source_dir=None, zip_filename=None):
+    """Creates a zip file of all downloaded files in the specified directory."""
+    source_dir = source_dir if source_dir else OUTPUT_DIR
+    
+    if not os.path.exists(source_dir):
+        print(f"Error: Source directory '{source_dir}' does not exist.")
+        return None
+    
+    files = [f for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f)) and f.endswith('.md')]
+    
+    if not files:
+        print(f"No files found in '{source_dir}' to zip.")
+        return None
+    
+    if not zip_filename:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        zip_filename = f"reddit_downloads_{timestamp}.zip"
+    
+    zip_path = os.path.join(os.path.dirname(source_dir), zip_filename)
+    try:
+        with zipfile.ZipFile(zip_path, 'w') as zipf:
+            for file in files:
+                file_path = os.path.join(source_dir, file)
+                zipf.write(file_path, os.path.basename(file_path))
+        
+        print(f"Successfully created zip file: {zip_path}")
+        print(f"Total files added to zip: {len(files)}")
+        return zip_path
+    except Exception as e:
+        print(f"Error creating zip file: {type(e).__name__} - {e}")
+        return None
 
 # --- Script Execution ---
 if __name__ == "__main__":
@@ -259,5 +293,14 @@ if __name__ == "__main__":
     print(f"Failed/Skipped Downloads: {failed_downloads}")
     print(f"Total Reddit URLs attempted:  {total_reddit_urls}") # Use pre-calculated count
     print(f"Downloads saved in directory: '{os.path.abspath(OUTPUT_DIR)}'")
+    
+    if successful_downloads > 0:
+        print("\n--- Creating ZIP Archive ---")
+        zip_path = create_download_zip()
+        if zip_path:
+            print(f"ZIP archive created: {zip_path}")
+            print(f"You can download this ZIP file for easy access to all downloaded posts.")
+        else:
+            print("Failed to create ZIP archive.")
 
 # --- END OF FILE reddit_downloader.py ---
