@@ -36,9 +36,9 @@ def sanitize_filename(text):
 def format_comment(comment, level=0):
     """Formats a single comment and its replies recursively for Markdown."""
     if not isinstance(comment, praw.models.Comment) or not hasattr(comment, 'body') or not comment.body:
-         if isinstance(comment, praw.models.MoreComments):
-             return ""
-         return ""
+        if isinstance(comment, praw.models.MoreComments):
+            return ""
+        return ""
 
     indent = ">" * (level + 1) + " "
     author = f"u/{comment.author.name}" if comment.author else "[deleted]"
